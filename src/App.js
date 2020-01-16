@@ -1,8 +1,10 @@
 import React from 'react';
-import logo from './logo.svg';
+
 import './App.css';
 import Products from './components/Products';
-import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
+import SingleItem from './components/SingleItem'; 
+
+import { BrowserRouter, Switch, Route } from "react-router-dom";
 
 function App() {
   return (
@@ -11,7 +13,7 @@ function App() {
       <BrowserRouter>
         <Switch>
           <Route exact path="/" component={Products} />
-          
+         <Route exact path='/product/:id' component={SingleItem} />
         </Switch>
 
       </BrowserRouter>

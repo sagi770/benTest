@@ -1,58 +1,54 @@
 import React, { Component, Fragment } from "react";
 
-import axios from 'axios';
 import ProductItem from "./ProductItem";
-import {Redirect } from "react-router-dom";
+import { Redirect } from "react-router-dom";
+import url from "./json.json";
+
+
 class Products extends Component {
+  constructor(props) {
+    super(props);
 
-  constructor(props){
-      super(props);
-
-      this.state= {prudocts: null, loading :false};
-
-  }  
+    this.state = { products: null, loading: true, product: null };
+  }
   componentDidMount() {
-
-    const url= "json.json";
-    this.setState({...this.state, loading: true});
-    axios.get(url).then( (products) =>{
-
-        this.setState({...this.state, products: products , loading: false});
-
-    });
-
+    this.setState({ ...this.state, products: url, loading: false });
   }
-  onClick= ( event, name) =>{
-
-    event.prevantDefault();
+  onClick = (event, product) => {
+   
+    this.setState({...this.state, product});
     
-    return <Redirect to={`product/${name}`}></Redirect>;
-  }
+  };
   render() {
 
-    return this.props.loading ? (
-     <h1>Loading..</h1>
+    if (this.state.loading){
+      return <h1>Loading..</h1>;
+    }else if(this.state.product){
+      return <Redirect to={{pathname:"/product/"+ this.state.product.id, 
+      state:{product:this.state.product}}} ></Redirect>;
+    }
+    return this.state.loading ? (
+       <h1>Loading..</h1> 
     ) : (
-      // <Fragment>
-      //   <h1 className="large text-primary">Products</h1>
-      //   <div className="posts">
-      //     {this.state.products.map(product => (
-      //       {/* <ProductItem
-      //         key={product.id}
-      //         name={product.name}
-      //         price= {product.price}
-      //         onClick={ (event) => this.onClick(event, product.name)}
-      //       /> */
-            
-      //       }
-      //     ))}
-      //   </div>
-       
-      // </Fragment>
-      <h1>dsa</h1>
+      <Fragment>
+        <h1 className="large text-primary">Products</h1>
+        
+        <div className="container">
+          {this.state.products.map(product => {
+            return (
+              <ProductItem
+                id={product.id}
+                key={product.id}
+                name={product.name}
+                price={product.price}
+                click={(e, product) => this.onClick(e, product)}
+              />
+            );
+          })}
+        </div>
+      </Fragment>
     );
   }
 }
-
 
 export default Products;
